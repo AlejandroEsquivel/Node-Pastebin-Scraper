@@ -1,23 +1,26 @@
+/*
+  Author: Alejandro Esquivel
+  Note: You can use this in any way you like. I do not take liability if you get banned from Pastebin, use responsibly ;)
+*/
 var cheerio = require('cheerio');
 var request = require('request');
 var Repeat = require('repeat');
 var sleep = require('sleep');
 //-------- Params
-
-var seconds = 5; // time to wait until fetching next paste
-var expressions = [/hack/i, /hotmail/i, /gmail/i, /yahoo/i, /magnet/i]; // each keyword case insensitive, /<keyword>/i
+var expressions = [/dump/i, /@hotmail/i, /@gmail/i, /@yahoo/i]; // each keyword case insensitive, /<keyword>/i
 var frequency = {
+  wait: 5, //second to wait before each request
   every: {
     unit: 'minutes',
-    quantity: 5
+    quantity: 5 // how often load recent pastes and scrape them
   },
   for:{
     unit: 'minutes',
-    quantity: 120
+    quantity: 120 // how long to continue scraping pastebin
   },
   start: {
     unit: 'sec',
-    quantity: 5
+    quantity: 5 // how long until scraper starts
   }
 }
 var logging = false; // Log the Pastebin ID each time before scraping contents.
@@ -67,9 +70,9 @@ var init = function(){
             console.log("Skipped URL: "+url);
           }
         }
-        sleep.sleep(seconds);
+        sleep.sleep(frequency.wait);
       }
     });
 };
 Repeat(init).every(frequency.every.quantity, frequency.every.unit).for(frequency.for.quantity, frequency.for.unit).start.in(frequency.start.quantity, frequency.start.unit);
-console.log('Pastebin trends searcher');
+console.log('Running Pastebin Scraper...');
