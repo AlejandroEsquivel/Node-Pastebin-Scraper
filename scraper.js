@@ -4,8 +4,22 @@ var Repeat = require('repeat');
 var sleep = require('sleep');
 var known = [];
 var seconds = 5; // time to wait until fetching next paste
-var keyword = '';
+var keyword = ''; // you can ignore this.
 var expressions = [/hack/i, /hotmail/i, /gmail/i, /yahoo/i, /magnet/i]; // each keyword case insensitive, /<keyword>/i
+var frequency = {
+  every: {
+    unit: 'minutes',
+    quantity: 5
+  },
+  for:{
+    unit: 'minutes',
+    quantity: 120
+  },
+  start: {
+    unit: 'sec',
+    quantity: 5
+  }
+}
 var match = function(string) {
     var size = expressions.length,i = 0;
     for (; i < size; i++) {
@@ -54,5 +68,5 @@ var init = function(){
       }
     });
 };
-Repeat(init).every(5, 'minutes').for(120, 'minutes').start.in(0, 'sec');
+Repeat(init).every(frequency.every.quantity, frequency.every.unit).for(frequency.for.quantity, frequency.for.unit).start.in(frequency.start.quantity, frequency.start.unit);
 console.log('Pastebin trends searcher');
