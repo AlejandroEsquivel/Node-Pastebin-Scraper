@@ -7,7 +7,9 @@ and also set an amount of time to wait between requests in order to prevent bein
 Moreover, the url's of the pastebin posts being scraped are recorded to avoid duplicate fetching when the scraper re-initiates.
 
 # Parameters to set
-Expressions [Array]
-- List what keywords to search for
-Seconds [Integer]
-- How long to wait between requests
+- Expressions [array] keywords to search
+- Frequency [object] determines how often scraper should re-start (reload new array of new pastes and scrape them), how long this program should run for, and how long to wait between http requests.
+
+# Run in background
+You can optionally install the npm package forever (npm install -g forever) and then let this scraper run.
+This can be done by (forever start scraper.js), a log will be automatically generated (forever list) shows where the log is located
