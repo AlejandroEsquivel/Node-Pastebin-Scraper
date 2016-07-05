@@ -2,9 +2,9 @@ var cheerio = require('cheerio');
 var request = require('request');
 var Repeat = require('repeat');
 var sleep = require('sleep');
-var known = [];
+//-------- Params
+
 var seconds = 5; // time to wait until fetching next paste
-var keyword = ''; // you can ignore this.
 var expressions = [/hack/i, /hotmail/i, /gmail/i, /yahoo/i, /magnet/i]; // each keyword case insensitive, /<keyword>/i
 var frequency = {
   every: {
@@ -20,6 +20,10 @@ var frequency = {
     quantity: 5
   }
 }
+var logging = false; // Log the Pastebin ID each time before scraping contents.
+//--- End params
+var known = [];
+var keyword = ''; // you can ignore this.
 var match = function(string) {
     var size = expressions.length,i = 0;
     for (; i < size; i++) {
@@ -42,7 +46,7 @@ var init = function(){
       for(var i=1;i<size;i++){
         if($('#content_left').find('table').children('tr').eq(i).children('td').eq(0).find('a').attr('href')){
           url = $('#content_left').find('table').children('tr').eq(i).children('td').eq(0).find('a').attr('href').split('/')[1];
-          console.log("URL: "+url);
+          (logging? console.log("URL: "+url):'');
           params.url = 'http://pastebin.com/'+url+'/';
           params.qs = {url:url};
           if(!known.find(search,'s')){
@@ -58,7 +62,6 @@ var init = function(){
               }
               return false;
             });
-            //return false;
           }
           else {
             console.log("Skipped URL: "+url);
