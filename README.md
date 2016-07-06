@@ -13,3 +13,7 @@ Moreover, the url's of the pastebin posts being scraped are recorded to avoid du
 # Run in background
 You can optionally install the npm package forever (npm install -g forever) and then let this scraper run.
 This can be done by (forever start scraper.js), a log will be automatically generated (forever list) shows where the log is located
+
+# Project setup
+- Run 'npm install'
+- Then 'npm start'
