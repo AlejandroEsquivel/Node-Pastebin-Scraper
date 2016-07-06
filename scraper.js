@@ -26,9 +26,9 @@ var frequency = {
 }
 var logging = false; // Log the Pastebin ID each time before scraping contents.
 
-var callback = function(url,html,raw,firstKeywordFound){ // define callback when paste found that matches expressions.
+var callback = function(url,html,raw,firstKeywordFound,time){ // define callback when paste found that matches expressions.
   var pasteId = url.split('/')[1];
-  console.log('Found keyword: '+firstKeywordFound+' at '+url);
+  console.log('Found keyword: '+firstKeywordFound+', posted: '+time+', at '+url);
 }
 
 //--- End params
@@ -52,11 +52,12 @@ var init = function(){
       var $ = cheerio.load(body);
       var parent = $('#content_left').find('table').children('tr');
       var size = parent.length;
-      var url = {},params={},raw={};
+      var url = {},params={},raw={},time="";
       for(var i=1;i<size;i++){
-        if($('#content_left').find('table').children('tr').eq(i).children('td').eq(0).find('a').attr('href')){
-          url = $('#content_left').find('table').children('tr').eq(i).children('td').eq(0).find('a').attr('href').split('/')[1];
+        if(parent.eq(i).children('td').eq(0).find('a').attr('href')){
+          url = parent.eq(i).children('td').eq(0).find('a').attr('href').split('/')[1];
           (logging? console.log("URL: "+url):'');
+          time = parent.eq(i).children('td').eq(1).html();
           params.url = 'http://pastebin.com/'+url+'/';
           params.qs = {url:url};
           if(!known.find(search,url)){
@@ -64,7 +65,7 @@ var init = function(){
             request.get(params, function(err,response,body){
               var search = (body ? (match(body)): false);
               if(search){
-                callback('pastebin.com'+response.request.url.pathname,body,$('#paste_code').eq(0).html(),keyword);
+                callback('pastebin.com'+response.request.url.pathname,body,$('#paste_code').eq(0).html(),keyword,time);
               }
               return false;
             });
