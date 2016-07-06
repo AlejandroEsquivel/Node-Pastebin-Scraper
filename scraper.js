@@ -8,7 +8,7 @@ var request = require('request');
 var Repeat = require('repeat');
 var sleep = require('sleep');
 //-------- Params
-var expressions = [/password/i,/ dump /i, /@hotmail/i, /@gmail/i, /@yahoo/i,/@hack/i, /@leak/i, /db_pass/i, /db_password/i; // each keyword case insensitive, /<keyword>/i
+var expressions = [/password/i,/ dump /i, /@hotmail/i, /@gmail/i, /@yahoo/i,/@hack/i, /leak/i, /db_pass/i, /db_password/i]; // each keyword case insensitive, /<keyword>/i
 var frequency = {
   wait: 5, //second to wait before each request
   every: {
@@ -27,6 +27,7 @@ var frequency = {
 var logging = false; // Log the Pastebin ID each time before scraping contents.
 
 var callback = function(url,html,raw,firstKeywordFound){ // define callback when paste found that matches expressions.
+  var pasteId = url.split('/')[1];
   console.log('Found keyword: '+firstKeywordFound+' at '+url);
 }
 
@@ -64,7 +65,6 @@ var init = function(){
               var search = (body ? (match(body)): false);
               if(search){
                 callback('pastebin.com'+response.request.url.pathname,body,$('#paste_code').eq(0).html(),keyword);
-                console.log('found');
               }
               return false;
             });
