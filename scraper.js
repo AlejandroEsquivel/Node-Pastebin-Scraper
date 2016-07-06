@@ -1,18 +1,19 @@
 /*
   Author: Alejandro Esquivel
   Note: You can use this in any way you like. I do not take liability if you get banned from Pastebin, use responsibly ;)
+  This can be used to detect breaches to your sites, or if your email address appears in a recent leak.
 */
 var cheerio = require('cheerio');
 var request = require('request');
 var Repeat = require('repeat');
 var sleep = require('sleep');
 //-------- Params
-var expressions = [/dump/i, /@hotmail/i, /@gmail/i, /@yahoo/i]; // each keyword case insensitive, /<keyword>/i
+var expressions = [/password/i,/ dump /i, /@hotmail/i, /@gmail/i, /@yahoo/i,/@hack/i, /@leak/i, /db_pass/i, /db_password/i; // each keyword case insensitive, /<keyword>/i
 var frequency = {
   wait: 5, //second to wait before each request
   every: {
     unit: 'minutes',
-    quantity: 5 // how often load recent pastes and scrape them
+    quantity: 3 // how often load recent pastes and scrape them
   },
   for:{
     unit: 'minutes',
@@ -24,6 +25,11 @@ var frequency = {
   }
 }
 var logging = false; // Log the Pastebin ID each time before scraping contents.
+
+var callback = function(url,html,raw,firstKeywordFound){ // define callback when paste found that matches expressions.
+  console.log('Found keyword: '+firstKeywordFound+' at '+url);
+}
+
 //--- End params
 var known = [];
 var keyword = ''; // you can ignore this.
@@ -52,16 +58,13 @@ var init = function(){
           (logging? console.log("URL: "+url):'');
           params.url = 'http://pastebin.com/'+url+'/';
           params.qs = {url:url};
-          if(!known.find(search,'s')){
+          if(!known.find(search,url)){
             known.push(url);
             request.get(params, function(err,response,body){
               var search = (body ? (match(body)): false);
               if(search){
-                console.log('Found '+keyword);
-                $ = cheerio.load(body); // html of paste page
-                raw = $('#paste_code').eq(0).html(); // raw paste content
-                console.log('pastebin.com'+response.request.url.pathname); // url of paste
-
+                callback('pastebin.com'+response.request.url.pathname,body,$('#paste_code').eq(0).html(),keyword);
+                console.log('found');
               }
               return false;
             });
