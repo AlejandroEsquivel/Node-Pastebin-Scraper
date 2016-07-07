@@ -7,8 +7,9 @@ var cheerio = require('cheerio');
 var request = require('request');
 var Repeat = require('repeat');
 var sleep = require('sleep');
+//require('request-debug')(request);
 //-------- Params
-var expressions = [/password/i,/ dump /i, /@hotmail/i, /@gmail/i, /@yahoo/i,/@hack/i, /leak/i, /db_pass/i, /db_password/i]; // each keyword case insensitive, /<keyword>/i
+var expressions = [/password/i,/ dump /i, /hotmail/i, /gmail/i, /yahoo/i,/hack/i, /leak/i, /db_pass/i, /db_password/i]; // each keyword case insensitive, /<keyword>/i
 var frequency = {
   wait: 5, //second to wait before each request
   every: {
@@ -21,14 +22,16 @@ var frequency = {
   },
   start: {
     unit: 'sec',
-    quantity: 5 // how long until scraper starts
+    quantity: 0 // how long until scraper starts
   }
 }
-var logging = false; // Log the Pastebin ID each time before scraping contents.
-
+var logging = true; // Log the Pastebin ID each time before scraping contents.
+var log = [];
 var callback = function(url,html,raw,firstKeywordFound,time){ // define callback when paste found that matches expressions.
   var pasteId = url.split('/')[1];
-  console.log('Found keyword: '+firstKeywordFound+', posted: '+time+', at '+url);
+  var msg = 'Found keyword: '+firstKeywordFound+', posted: '+time+', at '+url;
+  console.log(msg);
+  log.push(msg);
 }
 
 //--- End params
@@ -56,26 +59,30 @@ var init = function(){
       for(var i=1;i<size;i++){
         if(parent.eq(i).children('td').eq(0).find('a').attr('href')){
           url = parent.eq(i).children('td').eq(0).find('a').attr('href').split('/')[1];
-          (logging? console.log("URL: "+url):'');
           time = parent.eq(i).children('td').eq(1).html();
-          params.url = 'http://pastebin.com/'+url+'/';
-          params.qs = {url:url};
           if(!known.find(search,url)){
             known.push(url);
-            request.get(params, function(err,response,body){
-              var search = (body ? (match(body)): false);
-              if(search){
-                callback('pastebin.com'+response.request.url.pathname,body,$('#paste_code').eq(0).html(),keyword,time);
+            (logging? console.log("URL: "+url):'');
+            sleep.sleep(frequency.wait);
+            request.get({url:'http://pastebin.com/'+url+'/',qs:{time:time}}, function(err,response,body){
+              if(err){
+                console.log('Error:', err);
               }
-              return false;
+              var filter = (body ? (match(body)): false);
+              if(filter && response.req){
+                var paste = response.req.path.split('/')[1];
+                var time = response.req.path.split('?time=')[1];
+                callback('pastebin.com/'+paste+'/',body,$('#paste_code').eq(0).html(),keyword,time);
+              }
+              sleep.sleep(1);
             });
           }
           else {
             console.log("Skipped URL: "+url);
           }
         }
-        sleep.sleep(frequency.wait);
       }
+      console.log('Restarting scraper...');
     });
 };
 Repeat(init).every(frequency.every.quantity, frequency.every.unit).for(frequency.for.quantity, frequency.for.unit).start.in(frequency.start.quantity, frequency.start.unit);

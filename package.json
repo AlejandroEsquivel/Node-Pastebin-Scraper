@@ -7,7 +7,9 @@
     "cheerio": "^0.20.0",
     "repeat": "0.0.6",
     "request": "^2.72.0",
-    "sleep": "^3.0.1"
+    "request-debug": "^0.2.0",
+    "sleep": "^3.0.1",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {},
   "scripts": {
