@@ -5,14 +5,20 @@
   "main": "scraper.js",
   "dependencies": {
     "cheerio": "^0.20.0",
+    "q": "^1.5.1",
     "repeat": "0.0.6",
     "request": "^2.72.0",
     "request-debug": "^0.2.0",
-    "sleep": "^3.0.1",
-    "xml2js": "^0.4.17"
+    "request-promise": "^4.2.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-root-import": "^6.1.0",
+    "babel-preset-env": "^1.7.0"
+  },
   "scripts": {
+    "build": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./dist",
+    "example": "nodemon example.js --exec \"node -r babel-register\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
