@@ -15,7 +15,7 @@ Install dependencies
 
 You need nodemon for this.
 
-``npm i -g nodemon```
+```npm i -g nodemon```
 
 Run the example as in example.js
 
