@@ -48,7 +48,7 @@ scraper.on('match',(paste)=>{
 })
 ```
 
-## Usage: Poll Recent Pastes Continously
+# Usage: Poll Recent Pastes Continously
 
 `scraper.Repeat()` exposes (https://www.npmjs.com/package/repeat) a Repeat object, which will scrape PasteBin as per it's configuration.
 
