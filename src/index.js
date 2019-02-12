@@ -36,7 +36,6 @@ export default class PasteBinScraper extends EventEmitter {
 
     pasteHandler(paste) {
         const _self = this;
-        console.log(`Requesting paste ${paste.url}...`)
         return request.get({ url: `http://pastebin.com/${paste.url}/` }).then((body) => {
 
             paste.body = body;
@@ -74,8 +73,6 @@ export default class PasteBinScraper extends EventEmitter {
                     if (!_self.history[paste.url]) {
 
                         _self.history[paste.url] = 1;
-
-                        console.log("URL: " + paste.url);
 
                         promiseChain = promiseChain.then(() =>
                             q.delay(_self.config.eachPasteWait || 5000)
