@@ -15,7 +15,7 @@ export default class PasteBinScraper extends EventEmitter {
         this.defaultMatchCondition = (paste) =>
             this.expressionsToMatch.length && 
             this.expressionsToMatch
-                .reduce((orChain,expression)=>orChain || paste.body.match(expression),true);
+                .reduce((orChain,expression)=>orChain || paste.body.match(expression),false);
 
         this.setMatchCondition(this.defaultMatchCondition.bind(this));
     }
