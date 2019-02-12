@@ -7,6 +7,12 @@ Install dependencies
 
 ```npm i```
 
+## Build
+
+Build the files, the output will be in the folder `dist`. You can import `dist/index.js` for non ES6 class compatible enviroments.
+
+```npm run build```
+
 ## Use example.js
 
 You need nodemon for this.
@@ -16,12 +22,6 @@ You need nodemon for this.
 Run the example as in example.js
 
 ```npm run example```
-
-## Build
-
-Build the files, the output will be in the folder `dist`. You can import `dist/index.js` for non ES6 class compatible enviroments.
-
-```npm run build```
 
 
 # Usage: Basic 
