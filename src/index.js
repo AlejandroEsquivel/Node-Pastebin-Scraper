@@ -15,10 +15,9 @@ export default class PasteBinScraper extends EventEmitter {
         this.defaultMatchCondition = (paste) =>
             this.expressionsToMatch.length && 
             this.expressionsToMatch
-                .reduce((orChain,expression)=>orChain || paste.body.match(expression),true)
-                .bind(this);
+                .reduce((orChain,expression)=>orChain || paste.body.match(expression),true);
 
-        this.setMatchCondition(this.defaultMatchCondition);
+        this.setMatchCondition(this.defaultMatchCondition.bind(this));
     }
 
     setExpressionsToMatch(expressions){
@@ -31,14 +30,16 @@ export default class PasteBinScraper extends EventEmitter {
     }
 
     Repeat(){
-        return Repeat(this.scrape);
+        return Repeat(this.scrape.bind(this));
     }
 
     pasteHandler(paste) {
         const _self = this;
         return request.get({ url: `http://pastebin.com/${paste.url}/` }).then((body) => {
 
-            paste.body = body;
+            const $ = cheerio.load(body);
+
+            paste.body = $('#paste_code').val(); // raw paste body
             paste.url = `http://pastebin.com/${paste.url}/`;
 
             if(_self._matchCondition(paste)) {
