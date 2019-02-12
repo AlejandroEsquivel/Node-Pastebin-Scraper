@@ -19,7 +19,7 @@ Run the example as in example.js
 
 ## Build
 
-Build the files, the output will be in the folder 'dist' for those
+Build the files, the output will be in the folder `dist`. You can import `dist/index.js` for non ES6 class compatible enviroments.
 
 ```npm run build```
 
