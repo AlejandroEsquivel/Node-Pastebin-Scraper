@@ -23,7 +23,7 @@ Run the example as in example.js
 
 ## Build
 
-Build the files, the output will be in the folder 'dist'
+Build the files, the output will be in the folder 'dist' for those
 
 ```npm run build```
 
