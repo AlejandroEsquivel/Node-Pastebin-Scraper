@@ -1,9 +1,5 @@
 # Node Pastebin Scraper
 
-A way to scrape pastebin's recent paste feed without requiring a LIFETIME PRO account and using their API.
-
-A good tool for those that want to ensure that their accounts have not been compromised during a recent hack.
-
 # Setup
 
 ## Install 
